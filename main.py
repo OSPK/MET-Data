@@ -34,11 +34,10 @@ def get_data(objectID):
     url = f"{met_url}/{objectID}"
     resp = requests.get(url)
     resp_json = resp.json()
-    # create a database
-    conn = sqlite3.connect('met.db')
-    c = conn.cursor()
     # add object to database if object is a painting
     if resp_json["objectName"] == "Painting":
+        conn = sqlite3.connect('met.db')
+        c = conn.cursor()
         c.execute("INSERT INTO met VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,\
         ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", \
         (resp_json["objectID"], resp_json["isHighlight"], resp_json["accessionNumber"], resp_json["accessionYear"], resp_json["isPublicDomain"], resp_json["primaryImage"], resp_json["primaryImageSmall"], resp_json["additionalImages"], resp_json["constituents"], resp_json["department"], resp_json["objectName"], resp_json["title"], resp_json["culture"], resp_json["period"], resp_json["dynasty"], resp_json["reign"], resp_json["portfolio"], resp_json["artistRole"], resp_json["artistPrefix"], resp_json["artistDisplayName"], resp_json["artistDisplayBio"], resp_json["artistSuffix"], resp_json["artistAlphaSort"], resp_json["artistNationality"], resp_json["artistBeginDate"], resp_json["artistEndDate"], resp_json["artistGender"], resp_json["artistWikidata_URL"], resp_json["artistULAN_URL"], resp_json["objectDate"], resp_json["objectBeginDate"], resp_json["objectEndDate"], resp_json["medium"], resp_json["dimensions"], resp_json["dimensionsParsed"], resp_json["measurements"], resp_json["creditLine"], resp_json["geographyType"], resp_json["city"], resp_json["state"], resp_json["county"], resp_json["country"], resp_json["region"], resp_json["subregion"], resp_json["locale"], resp_json["locus"], resp_json["excavation"], resp_json["river"], resp_json["classification"], resp_json["rightsAndReproduction"], resp_json["linkResource"], resp_json["metadataDate"], resp_json["repository"], resp_json["objectURL"], resp_json["tags"], resp_json["objectWikidata_URL"], resp_json["isTimelineWork"], resp_json["GalleryNumber"]))
@@ -50,4 +49,4 @@ def get_data(objectID):
         return False
     
 # pqdm on 10 threads
-pqdm(objects, get_data, n_jobs=50)
+pqdm(objects[112942:], get_data, n_jobs=50)
